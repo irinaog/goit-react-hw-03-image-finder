@@ -1,8 +1,9 @@
 import PropTypes from 'prop-types';
+import css from './ImageGalleryItem.module.css';
 
-export const ImageGalleryItem = ({ imgURL, alt }) => {
+export const ImageGalleryItem = ({ imgURL, alt, largeImg }) => {
     return (
-        <li className="gallery-item">
+        <li className={css.galleryItem} onClick={largeImg}>
             <img src={imgURL} alt={alt} width='240px'/>
         </li>
     )

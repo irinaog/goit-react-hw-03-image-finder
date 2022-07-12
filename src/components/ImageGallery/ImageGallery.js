@@ -1,6 +1,7 @@
 // import PropTypes from 'prop-types';
 import { ImageGalleryItem } from "components/ImageGalleryItem/ImageGalleryItem";
 import { Component } from 'react';
+import css from './ImageGallery.module.css';
 // import { Button } from "components/Button/Button";
 
 export class ImageGallery extends Component {
@@ -31,13 +32,14 @@ export class ImageGallery extends Component {
     render() {
         // const { images } = this.state;
         // const gallery = this.props.images;
+        const { images, largeImg } = this.props;
 
         return (
              <>
-             <ul className="gallery">
+             <ul className={css.gallery}>
                 
-            {this.props.images.map(({webformatURL,tags, id}) => (
-                <ImageGalleryItem key={id} imgURL={ webformatURL} alt={tags} />
+            {images.map(({webformatURL,  tags, id}) => (
+                <ImageGalleryItem key={id} imgURL={webformatURL} alt={tags} largeImg={ ()=>largeImg()} />
             ))}
             
              </ul>

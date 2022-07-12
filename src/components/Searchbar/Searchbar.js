@@ -1,6 +1,8 @@
 import { Component } from "react";
 import PropTypes from 'prop-types';
 
+import css from './Searchbar.module.css';
+
 export class Searchbar extends Component {
   state = {
     imagesName: '',
@@ -29,15 +31,15 @@ export class Searchbar extends Component {
   render() {
     const { imagesName } = this.state;
 
-        return <header onSubmit={this.handleSubmit} className="searchbar">
-          <form className="form" >
-            <button type="submit"  className="button">
-              <span className="button-label">Search</span>
+        return <header onSubmit={this.handleSubmit} className={css.searchbar}>
+          <form className={css.form} >
+            <button type="submit"  className={css.button}>
+              <span className={css.buttonLabel}>Search</span>
             </button>
 
             <input
                 onChange={this.handleChange}
-                className="input"
+                className={css.input}
                 type="text"
                 autoComplete="off"
                 autoFocus
