@@ -1,5 +1,5 @@
-export const Button = () => {
+export const Button = ({loadImg}) => {
     return (
-        <button type="button">Loading...</button>
+        <button onClick={loadImg} type="button">Loading...</button>
     )
 };
