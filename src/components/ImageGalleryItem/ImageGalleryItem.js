@@ -4,6 +4,11 @@ import css from './ImageGalleryItem.module.css';
 
 export class ImageGalleryItem extends Component {
 
+    static propTypes = {
+        onClick: PropTypes.func.isRequired,
+        imgURL: PropTypes.string.isRequired,
+        alt:PropTypes.string.isRequired,
+    }
     
     render() {
         const { alt, imgURL, onClick } = this.props;
@@ -15,9 +20,3 @@ export class ImageGalleryItem extends Component {
 
 }
 
-ImageGalleryItem.propTypes = {
-    onClick:PropTypes.func.isRequired,
-    imgURL: PropTypes.string,
-    alt: PropTypes.string.isRequired,
-    // index: PropTypes.number.isRequired
-};

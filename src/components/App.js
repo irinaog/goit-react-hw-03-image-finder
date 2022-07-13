@@ -16,6 +16,7 @@ export class App extends Component {
   state = {
     images: null,
     imagesName: ' ',
+    totalImg:null,
     page: 1,
     status: 'idle',
     showModal: false,
@@ -25,8 +26,6 @@ export class App extends Component {
   componentDidUpdate(prevProps, prevState) {
         const prevName = prevState.imagesName;
     const nextName = this.state.imagesName;
-
-
     
     if (prevName !== nextName || prevState.page !== this.state.page) {
           this.setState({status:'pending'})
@@ -39,18 +38,15 @@ export class App extends Component {
           return new Error('Nothing find')
         })
         .then(images => {
+          this.setState({ totalImg :images.total})
+          
           if (!this.state.images) {
-            
             return this.setState({ images: images.hits })
           }
           return this.setState({ images: [...prevState.images, ...images.hits] })
         })
-        .finally(() => {
-          if (this.state.images) {
-            return this.setState({ status: 'resolved' })
-          }
-          return this.setState({ status: 'rejected' })
-        });
+        .finally(() => this.setState({ status: 'resolved' })
+        );
         } 
     };
 
@@ -70,16 +66,16 @@ export class App extends Component {
   };
 
   render() {
-    const {  images, status, showModal, imgModal} = this.state;
+    const {  images, status, showModal, imgModal, totalImg} = this.state;
     
     return (
       <>
         {showModal && <Modal onClose={this.toggleModal} image={images} index={imgModal} />}
         <Searchbar onSubmit={this.handleFormSubmit} />
-        {status === "pending" && <Loader />}
         {images && <ImageGallery images={images} showImg={this.toggleModal} />}
-        {status === 'resolved' && <Button loadImg={this.loadMore} />}
-        {status ==='rejected'&&<p>Nothing find</p>}
+        {status === "pending" && <Loader />}
+        {totalImg>0&& status!=="pending"  && <Button loadImg={this.loadMore} />}
+        {totalImg===0&& status!=="pending"&&<p>Nothing found</p>}
       
       </>
     )
