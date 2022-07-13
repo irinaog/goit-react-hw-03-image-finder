@@ -32,14 +32,14 @@ export class ImageGallery extends Component {
     render() {
         // const { images } = this.state;
         // const gallery = this.props.images;
-        const { images, largeImg } = this.props;
+        const { images, showImg } = this.props;
 
         return (
              <>
              <ul className={css.gallery}>
                 
-            {images.map(({webformatURL,  tags, id}) => (
-                <ImageGalleryItem key={id} imgURL={webformatURL} alt={tags} largeImg={ ()=>largeImg()} />
+            {images.map(({webformatURL,  tags, id}, index) => (
+                <ImageGalleryItem key={id} imgURL={webformatURL} alt={tags} onClick={ ()=>showImg(index)}  />
             ))}
             
              </ul>
