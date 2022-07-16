@@ -1,5 +1,6 @@
 import { Component } from "react";
 
+import galleryAPI from 'services/gallery';
 import { Searchbar } from "./Searchbar/Searchbar";
 import { ImageGallery } from "./ImageGallery/ImageGallery";
 import { Button } from "./Button/Button";
@@ -16,7 +17,6 @@ export class App extends Component {
   state = {
     images: null,
     imagesName: ' ',
-    totalImg:null,
     page: 1,
     status: 'idle',
     showModal: false,
@@ -28,25 +28,19 @@ export class App extends Component {
     const nextName = this.state.imagesName;
     
     if (prevName !== nextName || prevState.page !== this.state.page) {
-          this.setState({status:'pending'})
-      return fetch(`https://pixabay.com/api/?key=27638998-69eef40c5569256b773a36aea&q=${nextName}&image_type=photo&orientation=horizontal&page=${this.state.page}&per_page=12`)
-        .then(r => {
-          if (r.ok) {
-            return r.json()
+      this.setState({ status: 'pending' })
+            return galleryAPI.fetchImg(nextName, this.state.page)
+              .then(images => {
+                if (images.total === 0) {
+            return this.setState({status: 'rejected'})
           }
-                
-          return new Error('Nothing find')
-        })
-        .then(images => {
-          this.setState({ totalImg :images.total})
+       
           
           if (!this.state.images) {
-            return this.setState({ images: images.hits })
+            return this.setState({ images: images.hits, status:'resolved' })
           }
-          return this.setState({ images: [...prevState.images, ...images.hits] })
+          return this.setState({ images: [...prevState.images, ...images.hits], status:'resolved' })
         })
-        .finally(() => this.setState({ status: 'resolved' })
-        );
         } 
     };
 
@@ -66,16 +60,16 @@ export class App extends Component {
   };
 
   render() {
-    const {  images, status, showModal, imgModal, totalImg} = this.state;
+    const {  images, status, showModal, imgModal, } = this.state;
     
     return (
       <>
-        {showModal && <Modal onClose={this.toggleModal} image={images} index={imgModal} />}
+        {showModal && <Modal onClose={this.toggleModal} image={images[imgModal].largeImageURL} alt={images[imgModal].tags} />}
         <Searchbar onSubmit={this.handleFormSubmit} />
         {images && <ImageGallery images={images} showImg={this.toggleModal} />}
         {status === "pending" && <Loader />}
-        {totalImg>0&& status!=="pending"  && <Button loadImg={this.loadMore} />}
-        {totalImg===0&& status!=="pending"&&<p>Nothing found</p>}
+        {status==="resolved"  && <Button loadImg={this.loadMore} />}
+        {status==="rejected"&&<p>Nothing found</p>}
       
       </>
     )

@@ -8,8 +8,8 @@ const modalRoot = document.querySelector('#modal')
 
 export class Modal extends Component{
     static propTypes = {
-        image: PropTypes.arrayOf(PropTypes.shape()),
-        index:PropTypes.number.isRequired,
+        image: PropTypes.string.isRequired,
+        alt:PropTypes.string.isRequired,
    }
 
     componentDidMount() {
@@ -33,11 +33,11 @@ export class Modal extends Component{
 
 
     render() {
-        const { image, index } = this.props;
-        const img = image[index];
+        const { image, alt } = this.props;
+       
         return createPortal(<div className={css.overlay} onClick={this.handleBackDropClick}>
             <div className={css.modal}>
-                <img src={img.largeImageURL} alt={img.tag} />
+                <img src={image} alt={alt} />
             </div>
         </div>,
         modalRoot)
